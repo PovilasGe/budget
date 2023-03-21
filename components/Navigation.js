@@ -10,7 +10,7 @@ function Navigation() {
                     </div>
                     <small>hi Povilas</small>
                 </div>
-                <nav className="flex items-center gap-2">
+                <nav className="flex items-center gap-5">
                     <div><ImStatsBars className="text-2xl" /></div>
                     <div>
                         <button className="btn btn-danger">Sign out</button>
