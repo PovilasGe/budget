@@ -6,7 +6,12 @@ import Modal from "@/components/Modal";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js"
 import { Doughnut } from "react-chartjs-2"
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+
+import { db } from "./lib/firebase";
+import { collection, addDoc, getDocs, doc, deleteDoc } from "firebase/firestore";
+
+import { FaRegTrashAlt } from 'react-icons/fa'
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -39,17 +44,91 @@ const DUMMY_DATA = [
 
 export default function Home() {
 
+  const [income, setIncome] = useState([])
   const [showAddIncomeModal, setShowAddIncomeModal] = useState(false);
+  const amountRef = useRef()
+  const descriptionRef = useRef()
+
+  // Handler Function
+
+  const addIncomeHandler = async (e) => {
+    e.preventDefault();
+
+    const newIncome = {
+      amount: amountRef.current.value,
+      description: descriptionRef.current.value,
+      createdAt: new Date(),
+    };
+
+    const collectionRef = collection(db, 'income')
+
+    try {
+      const docSnap = await addDoc(collectionRef, newIncome);
+
+      // Update state
+      setIncome(prevState => {
+        return [
+          ...prevState,
+          {
+            id: docSnap.id,
+            ...newIncome,
+          }
+        ]
+      })
+      descriptionRef.current.value = "";
+      amountRef.current.value = "";
+    } catch (error) {
+      console.log(error.message);
+    }
+
+  };
+
+  const deleteIncomeEntreHandler = async (incomeId) => {
+    const docRef = doc(db, 'income', incomeId)
+    try {
+      await deleteDoc(docRef);
+      setIncome((prevState) => {
+        return prevState.filter((i) => i.id !== incomeId);
+      });
+
+      //Update State
+    } catch (error) {
+      console.log(error.message)
+    }
+
+  }
+
+  useEffect(() => {
+    const getIncomeData = async () => {
+      const collectionRef = collection(db, 'income');
+      const docsSnap = await getDocs(collectionRef);
+
+      const data = docsSnap.docs.map(doc => {
+        return {
+          id: doc.id,
+          ...doc.data(),
+          createdAt: new Date(doc.data().createdAt.toMillis())
+        };
+      });
+
+      setIncome(data)
+    }
+
+    getIncomeData();
+
+  }, [])
 
   return (
     <>
+      {/* Income Modal */}
       <Modal show={showAddIncomeModal} onClose={setShowAddIncomeModal}>
-        <form className="input-group">
+        <form onSubmit={addIncomeHandler} className="input-group">
           <div className="input-group">
             <label htmlFor="amount">Income Amount</label>
             <input
               type="number"
               name="amount"
+              ref={amountRef}
               min={0.01}
               step={0.01}
               placeholder="Enter income amount"
@@ -60,11 +139,31 @@ export default function Home() {
             <input
               type="text"
               name="descrption"
+              ref={descriptionRef}
               placeholder="Enter income description"
               required />
           </div>
           <button type="submit" className="btn btn-primary">Add entry</button>
         </form>
+
+        <div className="flex flex-col gap-4 mt-6">
+          <h3 className="text-2xl font-bold">Income History</h3>
+
+          {income.map(i => {
+            return (
+              <div className="flex items-center justify-between" key={i.id}>
+                <div>
+                  <p className="font-semibold">{i.description}</p>
+                  <small className="text-xs">{i.createdAt.toISOString()}</small>
+                </div>
+                <p className="flex items-center gap-2">
+                  {currencyFormatter(i.amount)}
+                  <button onClick={() => { deleteIncomeEntreHandler(i.id) }}><FaRegTrashAlt /></button>
+                </p>
+              </div>
+            )
+          })}
+        </div>
       </Modal>
 
 
@@ -87,6 +186,7 @@ export default function Home() {
           <div className="flex flex-col gap-4 mt-6">
             {DUMMY_DATA.map(expense => {
               return <ExpenseCategoryItem
+                key={expense.id}
                 color={expense.color}
                 title={expense.title}
                 total={expense.total} />
