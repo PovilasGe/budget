@@ -4,7 +4,7 @@ import './globals.css'
 
 import Navigation from "@/components/Navigation";
 
-import FinanceContextProvider from './/lib/store/finance-context';
+import FinanceContextProvider from '@/lib/store/finance-context';
 
 export default function RootLayout({ children }) {
   return (

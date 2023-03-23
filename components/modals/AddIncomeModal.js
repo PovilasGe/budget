@@ -1,10 +1,10 @@
 import { useRef, useEffect, useContext } from "react"
-import { currencyFormatter } from "@/app/lib/utils";
+import { currencyFormatter } from "@/lib/utils";
 import { collection, addDoc, getDocs, doc, deleteDoc } from "firebase/firestore";
-import { db } from "@/app/lib/firebase";
+import { db } from "@/lib/firebase";
 import Modal from "@/components/Modal";
 import { FaRegTrashAlt } from "react-icons/fa";
-import { financeContext } from "@/app/lib/store/finance-context";
+import { financeContext } from "@/lib/store/finance-context";
 
 function AddIncomeModal({ show, onClose }) {
     const amountRef = useRef();
@@ -17,7 +17,7 @@ function AddIncomeModal({ show, onClose }) {
         e.preventDefault();
 
         const newIncome = {
-            amount: amountRef.current.value,
+            amount: +amountRef.current.value,
             description: descriptionRef.current.value,
             createdAt: new Date(),
         };
