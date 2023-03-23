@@ -15,6 +15,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
+
 export default function Home() {
   const [showAddIncomeModal, setShowAddIncomeModal] = useState(false);
   const [showAddExpenseModal, setShowAddExpenseModal] = useState(false);
@@ -73,22 +74,17 @@ export default function Home() {
             + Income
           </button>
         </section>
+
         {/* Expenses */}
         <section className="py-6">
           <h3 className="text-2xl">My Expenses</h3>
           <div className="flex flex-col gap-4 mt-6">
             {expenses.map((expense) => {
-              return (
-                <ExpenseCategoryItem
-                  key={expense.id}
-                  color={expense.color}
-                  title={expense.title}
-                  total={expense.total}
-                />
-              );
+              return <ExpenseCategoryItem key={expense.id} expense={expense} />;
             })}
           </div>
         </section>
+
         {/* Chart Section */}
         <section className="py-6">
           <h3 className="text-2xl">Stats</h3>
