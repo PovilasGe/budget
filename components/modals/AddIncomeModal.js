@@ -5,12 +5,15 @@ import { db } from "@/lib/firebase";
 import Modal from "@/components/Modal";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { financeContext } from "@/lib/store/finance-context";
+import { authContext } from "@/lib/store/auth-context";
 
 function AddIncomeModal({ show, onClose }) {
     const amountRef = useRef();
     const descriptionRef = useRef();
     const { income, addIncomeItem, removeIncomeItem } =
         useContext(financeContext);
+
+    const { user } = useContext(authContext);
 
     // Handler Functions
     const addIncomeHandler = async (e) => {
@@ -20,6 +23,7 @@ function AddIncomeModal({ show, onClose }) {
             amount: +amountRef.current.value,
             description: descriptionRef.current.value,
             createdAt: new Date(),
+            uid: user.uid,
         };
 
         try {
