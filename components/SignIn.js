@@ -9,17 +9,18 @@ function SignIn() {
 
     return (
         <main className="container max-w-2xl px-6 mx-auto">
-            <h1 className="mb-6 text-6xl font-bold text-center">Hello 👋</h1>
+
 
             <div className="flex flex-col overflow-hidden shadow-md shadow-slate-500 bg-slate-800 rounded-2xl">
-                <div className="h-100">
+                <div className="h-100px">
                     <img
                         className="object-cover w-full h-full"
-                        src="https://gifdb.com/images/high/hello-cute-cat-box-kns8e4qa95ne2tnv.gif"
+                        src="https://www-assets.youneedabudget.com/wp-content/uploads/2021/10/20180005/illo_budgetingtopics_realbudgets_investigate.svg"
                     />
                 </div>
 
                 <div className="px-4 py-4">
+                    <h1 className="mb-6 text-3xl font-bold text-center">Welcome to budget tracker tool!</h1>
                     <h3 className="text-2xl text-center">Please sign in to continue</h3>
 
                     <button
