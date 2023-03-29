@@ -21,7 +21,7 @@ function SignIn() {
 
                 <div className="px-4 py-4">
                     <h1 className="mb-6 text-3xl font-bold text-center">Welcome to budget tracker tool!</h1>
-                    <h3 className="text-2xl text-center">Please sign in to continue</h3>
+                    <h3 className="text-xl text-center">Please sign in to continue</h3>
 
                     <button
                         onClick={googleLoginHandler}
