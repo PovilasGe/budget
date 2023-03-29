@@ -12,7 +12,7 @@ function SignIn() {
 
 
             <div className="flex flex-col overflow-hidden shadow-md shadow-slate-500 bg-slate-800 rounded-2xl">
-                <div className="h-100px">
+                <div className="h-100">
                     <img
                         className="object-cover w-full h-full"
                         src="https://www-assets.youneedabudget.com/wp-content/uploads/2021/10/20180005/illo_budgetingtopics_realbudgets_investigate.svg"
